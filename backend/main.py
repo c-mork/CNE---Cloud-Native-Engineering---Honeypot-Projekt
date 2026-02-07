@@ -1,7 +1,13 @@
+import os
 from fastapi import FastAPI
 
-app = FastAPI(title="Cloud Native Honeypot")
+ENV = os.getenv("APP_ENV", "dev")
+
+app = FastAPI(title=f"Cloud Native Honeypot ({ENV})")
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "environment": ENV
+    }
