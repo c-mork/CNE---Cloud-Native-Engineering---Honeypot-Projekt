@@ -12,4 +12,10 @@ def health():
         "environment": ENV
     }
 
-#test1
+
+@app.get("/user/{user_id}")
+def health():
+    return {
+        "status": "User not found",
+        "environment": ENV
+    }
