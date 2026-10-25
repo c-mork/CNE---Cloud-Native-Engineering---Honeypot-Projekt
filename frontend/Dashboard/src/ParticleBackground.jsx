@@ -43,7 +43,7 @@ interactivity: {
               value: 200,
             },
             color: {
-              value: "#ff1688",
+              value: "#1E90FF",
             },
             shape: {
               type: "circle",
@@ -64,7 +64,7 @@ interactivity: {
             links: {
               enable: true,
               distance: 150,
-              color: "#ff1688",
+              color: "#1E90FF",
               opacity: 0.4,
               width: 1,
             },
