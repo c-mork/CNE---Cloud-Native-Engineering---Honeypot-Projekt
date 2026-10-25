@@ -10,14 +10,37 @@
   font-weight: 400;
 }
 
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background: transparent;
+}
+
 * { box-sizing: border-box; }
 
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 button, a { font: inherit; }
 a { color: inherit; text-decoration: none; }
 
-.app-shell { min-height: 100vh; }
-
+.app-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background: transparent;
+}
+#network-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
@@ -138,4 +161,25 @@ footer span { padding: 0 6px; }
   .metrics { grid-template-columns: 1fr 1fr; gap: 10px; }
   .metric-card { padding: 13px; }
   .metric-value { font-size: 25px; }
+}
+/* Animated particle background */
+#network-background {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#network-background canvas {
+  display: block;
+}
+
+/* Keep dashboard above the particles */
+.app-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background: transparent;
 }

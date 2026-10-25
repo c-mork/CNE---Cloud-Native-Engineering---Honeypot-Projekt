@@ -11,7 +11,9 @@ import {
   ArrowUpRight,
   CircleCheck,
 } from "lucide-react";
+
 import "./App.css";
+import ParticleBackground from "./ParticleBackground.jsx";
 
 const events = [
   { time: "uwu", ip: "192.0.2.14", type: "SQL Injection", severity: "High" },
@@ -28,6 +30,9 @@ function MyButton() {
 }
 function App() {
   return (
+        <>
+         <ParticleBackground />
+
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand">
@@ -182,6 +187,7 @@ function App() {
         </footer>
       </main>
     </div>
+        </>
   );
 }
 
