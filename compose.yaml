@@ -1,9 +1,50 @@
+# Startet die DB
 services:
-  api:
-    build:
-      context: ./backend
-    ports:
-      - "8000:8000"
+  postgres:
+    image: postgres:17
+    container_name: PollyWolly
     environment:
-      APP_ENV: dev
-    restart: unless-stopped
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+# GUI zum bearbeiten der DB
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: honeypot-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "127.0.0.1:8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+# Startet das React Frontend (Honeypot Dashboard)
+#  - frontend:
+#      image: postgres:17
+#      container_name: postgresDB
+#      environment:
+#        POSTGRES_DB: ${DB_NAME}
+#        POSTGRES_USER: ${DB_USER}
+#        POSTGRES_PASSWORD: ${DB_PASSWORD}
+#      ports:
+#        - "123:123"
+# Startet das Backend (FastAPI)
+#  - backend:
+#      image: postgres:17
+#      container_name: postgresDB
+#      environment:
+#        POSTGRES_DB: ${DB_NAME}
+#        POSTGRES_USER: ${DB_USER}
+#        POSTGRES_PASSWORD: ${DB_PASSWORD}
+#      ports:
+#        - "666:666"
