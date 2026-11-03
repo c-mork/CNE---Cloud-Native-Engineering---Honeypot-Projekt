@@ -1,15 +1,51 @@
+/* Todo: Look at colors and change them as well as font size adjustments */
 
+
+/* Font Imports
+ Import DM Sans for general UI text and Space Grotesk for headings. */
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
 
+
+/* Global Styles and Root Config
+ Define the application's default font, colors and rendering behavior. */
 :root {
+  /* Background colors */
+  --bg-primary: #0b0e14;
+  --bg-secondary: #10141d;
+  --bg-card: #111620;
+  --bg-light: #1a202d;
+
+  /* Border colors */
+  --border-primary: #242a36;
+
+  /* Text colors */
+  --text-primary: #e5eaf3;
+  --text-secondary: #8490a3;
+
+  /* Accent colors */
+  --accent-blue: #80aaff;
+  --accent-green: #47d6a0;
+  --accent-background: #1c2b48;
+
+  /* -- Global Typography and defaults -- */
   font-family: "DM Sans", sans-serif;
-  color: #e5eaf3;
-  background: #0b0e14;
+  color: var(--text-primary);
+  background: var(--bg-primary);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   font-weight: 400;
+
+   /* Typography scale */
+  --font-xs: 12px;
+  --font-sm: 13px;
+  --font-base: 16px;
+  --font-lg: 18px;
+  --font-xl: 24px;
+  --font-title: 30px;
+
 }
 
+/* Ensure the main document and React root occupy the available height. */
 html,
 body,
 #root {
@@ -17,141 +53,344 @@ body,
   margin: 0;
 }
 
+/* Set the minimum viewport dimensions and default body background. */
 body {
   min-width: 320px;
   min-height: 100vh;
   background: transparent;
 }
-
+/* Include padding and borders in element width and height calculations. */
 * { box-sizing: border-box; }
 
-body { margin: 0; min-width: 320px; min-height: 100vh; }
+/* Inherit the surrounding font styles for buttons and links. */
 button, a { font: inherit; }
+/* Remove default link styling. */
 a { color: inherit; text-decoration: none; }
 
+/* Reset default heading and paragraph margins. */
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+
+/* ----- App Layout Background ------ */
+/* Main application wrapper, positioned above the animated background. */
 .app-shell {
   position: relative;
   z-index: 1;
   min-height: 100vh;
   background: transparent;
 }
+
+/* Background layer used for the animated particle network. */
 #network-background {
   position: fixed;
   inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
 }
+/* Ensure the particle canvas fills its background container. */
+#network-background canvas {
+  display: block;
+}
+
+
+/* --------- Sidebar and branding ----------- */
 .sidebar {
   position: fixed;
   inset: 0 auto 0 0;
   width: 245px;
   padding: 27px 17px;
-  background: #10141d;
-  border-right: 1px solid #242a36;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-primary);
   display: flex;
   flex-direction: column;
 }
-
+/* Brand logo and text container. */
 .brand { display: flex; align-items: center; gap: 12px; padding: 0 7px 40px; }
+/* Brand icon container. */
 .brand-icon {
-  display: grid; place-items: center; width: 42px; height: 42px;
-  color: #80aaff; background: #1c2b48; border-radius: 12px;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  color: var(--accent-blue);
+  background: var(--accent-background);
+  border-radius: 12px;
 }
-.brand strong, .brand span { display: block; }
-.brand strong { font-family: "Space Grotesk", sans-serif; font-size: 17px; }
-.brand span { color: #778399; font-size: 9px; letter-spacing: 1.3px; margin-top: 4px; }
 
+/* Display brand name and subtitle on separate lines. And Styling */
+.brand strong,
+.brand span { display: block; }
+.brand strong {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: var(--font-xl); }
+/* Smaller brand subtitle styling. */
+.brand span {
+  color: var(--text-secondary);
+  font-size: 9px;
+  letter-spacing: 1.3px;
+  margin-top: 4px; }
+
+
+/* ----------  Sidebar Navigator -------- */
+/* Shared styling for navigation labels and section headings. */
 .nav-label, .eyebrow {
-  color: #748198; font-size: 10px; letter-spacing: 1.5px; font-weight: 700;
+  color: var(--text-secondary);
+  font-size: var(--font-base);
+  letter-spacing: 1.5px;
+  font-weight: 700;
 }
-.nav-label { padding-left: 11px; margin-bottom: 13px; }
+/* Navigation section label spacing. */
+.nav-label {
+  padding-left: 11px;
+  margin-bottom: 13px; }
+/* Arrange navigation links vertically with consistent spacing. */
 .sidebar nav { display: grid; gap: 6px; }
 
+/* Individual navigation link layout and default appearance. */
 .nav-item {
-  display: flex; align-items: center; gap: 12px; padding: 12px;
-  border-radius: 8px; color: #9ba6b9; font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: var(--font-base);
 }
-.nav-item:hover { background: #1a202d; color: #fff; }
-.nav-item.active { color: #a9c5ff; background: #1c2b48; }
 
+/* Highlight navigation links when hovered. */
+.nav-item:hover { background: var(--bg-light); color: var(--text-primary); }
+.nav-item.active { color: #a9c5ff; background: var(--accent-background); }
+
+
+/* ------- Sidebar footer and environment status ----------- */
+/* Push the bottom sidebar content towards the bottom. */
 .sidebar-bottom { margin-top: auto; }
+/* Environment information container. */
 .environment {
-  margin-top: 24px; padding: 15px 10px; display: flex; gap: 10px;
-  align-items: center; border-top: 1px solid #272d38;
+  margin-top: 24px;
+  padding: 15px 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  border-top: 1px solid #272d38;
 }
-.environment strong, .environment span { display: block; }
-.environment strong { font-size: 11px; }
-.environment div span { color: #7e8ba0; font-size: 10px; margin-top: 4px; }
-.status-dot { width: 8px; height: 8px; background: #47d6a0; border-radius: 50%; }
 
-.main-content { margin-left: 245px; padding: 32px 38px; max-width: 1700px; }
-.topbar, .top-actions, .welcome-row, .metric-top, .panel-header {
+/* Display environment title and subtitle separately, title styling, subtitle styling */
+.environment strong, .environment span { display: block; }
+.environment strong { font-size: var(--font-base); }
+.environment div span { color: var(--text-secondary); font-size: var(--font-sm); margin-top: 4px; }
+/* Small green indicator representing the environment status. */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%; }
+
+
+/* ----- main container ------ */
+/* Main dashboard content, offset to accommodate the sidebar. */
+.main-content {
+  margin-left: 245px;
+  padding: 32px 38px;
+  max-width: 1700px; }
+/* Shared flex layout for dashboard header components. */
+.topbar,
+.top-actions,
+.welcome-row,
+.metric-top,
+.panel-header {
   display: flex; align-items: center; justify-content: space-between;
 }
-.topbar { padding-bottom: 25px; border-bottom: 1px solid #242a36; }
-h1, h2, p { margin: 0; }
-h1 { font: 600 27px "Space Grotesk", sans-serif; margin-top: 7px; }
+
+/* Main dashboard header styling. */
+.topbar { padding-bottom: 25px; border-bottom: 1px solid var(--border-primary); }
+/* Main page heading. */
+h1 {
+  font: 600 27px "Space Grotesk", sans-serif;
+  margin-top: 7px; }
+
 .top-actions { gap: 12px; }
+/* Icon button styling for dashboard actions. */
 .icon-button {
-  display: grid; place-items: center; width: 37px; height: 37px;
-  background: #141a25; border: 1px solid #2a3140; border-radius: 9px;
-  color: #aeb9ca; cursor: pointer;
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  background: #141a25;
+  border: 1px solid #2a3140;
+  border-radius: 9px;
+  color: #aeb9ca;
+  cursor: pointer;
 }
+
+/* User avatar styling. */
 .avatar {
-  display: grid; place-items: center; width: 36px; height: 36px;
-  background: #293752; border-radius: 50%; font-size: 12px; font-weight: 700;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: #293752;
+  border-radius: 50%;
+  font-size: var(--font-base);
+  font-weight: 700;
 }
-.welcome-row { margin: 29px 0 22px; gap: 15px; }
-.welcome-row h2, .panel h2 { font: 600 17px "Space Grotesk", sans-serif; }
-.welcome-row p, .panel-header p { color: #8490a3; font-size: 12px; margin-top: 6px; }
+
+
+/* -------- Welcome Section ----------- */
+/* Welcome message and accompanying badge layout. */
+.welcome-row {
+  margin: 29px 0 22px;
+  gap: 15px; }
+/* Section heading typography. */
+.welcome-row h2,
+.panel h2 {
+  font: 600 17px "Space Grotesk", sans-serif; }
+
+/* Supporting text below welcome and panel headings. */
+.welcome-row p,
+.panel-header p {
+  color: var(--text-secondary);
+  font-size: var(--font-base);
+  margin-top: 6px; }
+
+
+/* Badge indicating that the dashboard is running in demo mode. NEEDS CHANGING ONCE VALID DATA IS IN */
 .demo-badge {
-  color: #e6bd71; background: #382c19; border: 1px solid #5d4726;
-  border-radius: 5px; padding: 7px 9px; font-size: 9px; letter-spacing: 1px;
+  color: #e6bd71;
+  background: #382c19;
+  border: 1px solid #5d4726;
+  border-radius: 5px;
+  padding: 7px 9px;
+  font-size: var(--font-sm);
+  letter-spacing: 1px;
 }
-.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+
+
+/* ----------- Metric Cards ---------- */
+/* Responsive grid containing the dashboard metric cards. */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px; }
+/* Shared appearance for metric cards and content panels. */
 .metric-card, .panel {
-  background: #111620; border: 1px solid #262d3a; border-radius: 11px;
+  background: var(--bg-card);
+  border: 1px solid #262d3a;
+  border-radius: 11px;
 }
+
+/* Individual metric card spacing, Icon, Layout and Icon color */
 .metric-card { min-width: 0; padding: 19px; }
-.metric-top { color: #a4afc0; font-size: 12px; gap: 8px; }
+.metric-top { color: #a4afc0; font-size: var(--font-lg); gap: 8px; }
 .metric-top svg { color: #819bc8; }
+/* Main metric value typography. */
 .metric-value {
-  display: block; font: 600 30px "Space Grotesk", sans-serif; margin-top: 19px;
+  display: block;
+  font: 600 30px "Space Grotesk", sans-serif;
+  margin-top: 19px;
 }
-.online { color: #5ce0a8; font-size: 25px; }
+
+/* Special styling for online status values. NEEDS OFFLINE STATUS? */
+.online { color: var(--accent-green); font-size: 25px; }
+/* Supporting information below metric values. */
 .metric-note {
-  display: flex; align-items: center; gap: 5px; color: #7e8ba0;
-  font-size: 10px; margin-top: 9px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  margin-top: 9px;
 }
-.metric-note svg { color: #55dba4; }
-.panel { margin-top: 25px; overflow: hidden; }
-.panel-header { padding: 22px 22px 19px; gap: 15px; }
+
+/* Positive trend indicator color. */
+.metric-note svg { color: var(--accent-green); }
+
+
+
+/* ---------- Content Panels and tables------------ */
+/* Main content panel container. */
+.panel {
+  margin-top: 25px;
+  overflow: hidden; }
+/* Panel title, description and action layout. */
+.panel-header {
+  padding: 22px 22px 19px;
+  gap: 15px; }
+/* Text-based button used for panel actions. */
 .text-button {
-  display: flex; align-items: center; gap: 5px; background: transparent;
-  border: 0; color: #a7c2ff; font-size: 11px; cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 0;
+  color: #a7c2ff;
+  font-size: var(--font-base);
+  cursor: pointer;
 }
+/* Allow tables to scroll horizontally on smaller screens. */
 .table-scroll { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
+/* General table layout and appearance. */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap; }
+
+
 thead { background: #151b27; }
-th { color: #7d8aa0; font-size: 9px; letter-spacing: 1px; font-weight: 600; }
-th, td { padding: 15px 22px; border-bottom: 1px solid #242a36; }
-td { font-size: 12px; color: #d1d8e5; }
-.time-cell { color: #8d9ab0; }
+/* Table column heading typography. */
+th {
+  color: var(--text-secondary);
+  font-size: var(--font-sm);
+  letter-spacing: 1px;
+  font-weight: 600; }
+
+/* Shared table cell spacing and separators. */
+th,
+td {
+  padding: 15px 22px;
+  border-bottom: 1px solid var(--border-primary); }
+/* Table data cell typography. */
+td { font-size: var(--font-base); color: #d1d8e5; }
+
+/* Content style */
+.time-cell { color: var(--text-secondary); }
 .ip-cell { font-family: monospace; color: #b6caff; }
-.severity { display: inline-block; padding: 5px 8px; border-radius: 5px; font-size: 10px; }
+.severity { display: inline-block; padding: 5px 8px; border-radius: 5px; font-size: var(--font-base); }
 .severity.high { color: #ff9999; background: #3b2027; }
 .severity.medium { color: #f1c477; background: #382e1c; }
 .severity.low { color: #75d9b0; background: #18352d; }
-.panel-footer { padding: 14px 22px; color: #7e8ba0; font-size: 10px; }
-footer { padding: 25px 0; color: #748198; font-size: 10px; }
+
+/* --------- Panel and Page Footers ------------- */
+/* Additional information displayed below content panels. */
+.panel-footer {
+  padding: 14px 22px;
+  color: var(--text-secondary);
+  font-size: var(--font-base); }
+/* Main application footer styling. */
+footer {
+  padding: 25px 0;
+  color: var(--text-secondary);
+  font-size: var(--font-base); }
+/* Spacing between footer text elements. */
 footer span { padding: 0 6px; }
 
+
+/* ------------ Responsive Design - tablets ---------- */
+/* Adjust dashboard layout for medium-sized screens. */
 @media (max-width: 1050px) {
   .sidebar { width: 200px; }
   .main-content { margin-left: 200px; padding: 25px 20px; }
   .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-
+/* ------------ Responsive Design - Mobile ---------- */
+/* Adjust dashboard layout for mobile devices */
 @media (max-width: 650px) {
   .sidebar { position: static; width: auto; padding: 16px; }
   .brand { padding-bottom: 18px; }
@@ -162,6 +401,8 @@ footer span { padding: 0 6px; }
   .metric-card { padding: 13px; }
   .metric-value { font-size: 25px; }
 }
+
+
 /* Animated particle background */
 #network-background {
   position: fixed;

@@ -1,33 +1,89 @@
-# Startet die DB
+# ----- Docker Compose Config -----
+
 services:
+
+  # ----- Postgresql database -----
+  #Starts the PostgreSQL database container
   postgres:
     image: postgres:17
     container_name: PollyWolly
+
+    # Database credentials loaded from the root .env file
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "127.0.0.1:5432:5432"
+
+    # Persistent database storage and initial SQL setup
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
-# GUI zum bearbeiten der DB
+ # Checks whether PostgreSQL is ready to accept connections.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+# ----- PGAdmin Database Management -----
+# GUI for managing PostgreSQL
   pgadmin:
     image: dpage/pgadmin4
     container_name: honeypot-pgadmin
+
+    # Default login credentials for pgAdmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     ports:
       - "127.0.0.1:8080:80"
+    # Keeps pgAdmin configuration persistent
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
+# ----- FastApi Backend -----  test phase
+backend:
+    build:
+      # Uses the project root as the Docker build context.
+      context: .
+      dockerfile: backend/Dockerfile
+
+    container_name: honeypot-backend
+
+    # Exposes the API locally on port 8000.
+    ports:
+      - "127.0.0.1:8000:8000"
+
+    # Database connection configuration.
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+
+    # Waits until PostgreSQL is healthy before starting.
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+
+
+
+# persistent docker volumes
+# Stores PostgreSQL data between container restarts
+# Stores pgAdmin settings and configuration
 volumes:
   postgres_data:
   pgadmin_data:
+
+
+
+
 # Startet das React Frontend (Honeypot Dashboard)
 #  - frontend:
 #      image: postgres:17
