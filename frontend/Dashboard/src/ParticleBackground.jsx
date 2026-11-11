@@ -50,7 +50,7 @@ interactivity: {
     // Configure the appearance and movement of particles
           particles: {
             number: {
-              value: 200,
+              value: 300,
             },
             color: {
               value: PARTICLE_BLUE,
