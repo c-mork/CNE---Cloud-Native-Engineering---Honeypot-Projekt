@@ -2,13 +2,12 @@ import { useState } from "react";
 import {
   ChevronRight,
   Cloud,
-  LockKeyhole,
   ShieldCheck,
-  X,
 } from "lucide-react";
 
-import Sidebar from "./components/Sidebar";
-import Topbar from "./components/Topbar";
+import Sidebar from "./components/sidebar";
+import Topbar from "./components/topbar";
+import Login from "./components/login.jsx";
 
 import "./App.css";
 
@@ -51,16 +50,20 @@ function App() {
   function handleLoginSubmit(event) {
     event.preventDefault();
 
-    // We deliberately do not send or save the entered credentials.
-    // Clear the form immediately after submission.
+    // Do not transmit or persist credentials.
+    // Clear the form immediately.
     event.currentTarget.reset();
 
     setShowLogin(false);
-    showToast("Demo sign-in submitted. Authentication is not enabled yet.");
+
+    showToast(
+      "Demo sign-in submitted. Authentication is not enabled yet."
+    );
   }
 
   return (
     <div className="app-layout">
+
       {/* Persistent navigation sidebar */}
       <Sidebar
         activePage={activePage}
@@ -69,13 +72,15 @@ function App() {
 
       {/* Main application area */}
       <main className="main-content">
+
         <Topbar
           searchQuery=""
-          onSearchChange={() => openLogin()}
+          onSearchChange={() => {}}
           onUpload={openLogin}
         />
 
         <div className="dashboard-content">
+
           {/* Breadcrumb navigation */}
           <div className="breadcrumb">
             <span>CloudVault</span>
@@ -93,6 +98,7 @@ function App() {
 
           {/* Logged-out storage overview */}
           <section className="storage-overview">
+
             <div className="storage-overview-icon">
               <Cloud size={23} />
             </div>
@@ -106,13 +112,14 @@ function App() {
               className="primary-button"
               onClick={openLogin}
             >
-              <LockKeyhole size={17} />
               Sign in
             </button>
+
           </section>
 
           {/* Main sign-in prompt */}
           <section className="login-gate">
+
             <div className="login-gate-icon">
               <ShieldCheck size={34} />
             </div>
@@ -128,12 +135,12 @@ function App() {
               className="primary-button login-gate-button"
               onClick={openLogin}
             >
-              <LockKeyhole size={17} />
               Sign in to CloudVault
             </button>
 
             <div className="login-gate-footer">
               <span>New to CloudVault?</span>
+
               <button
                 className="text-button"
                 onClick={() =>
@@ -143,92 +150,30 @@ function App() {
                 Create an account
               </button>
             </div>
+
           </section>
 
-          {/* Small reassurance section */}
+          {/* Security reassurance */}
           <div className="security-note">
             <ShieldCheck size={17} />
-            <span>Your files are protected with secure cloud storage.</span>
+            <span>
+              Your files are protected with secure cloud storage.
+            </span>
           </div>
+
         </div>
       </main>
 
-      {/* Login modal */}
+      {/* Login component */}
       {showLogin && (
-        <div
-          className="modal-backdrop"
-          onClick={(event) => {
-            if (event.target === event.currentTarget) {
-              setShowLogin(false);
-            }
+        <Login
+          onClose={() => setShowLogin(false)}
+          onSubmit={handleLoginSubmit}
+          onRegister={() => {
+            setShowLogin(false);
+            showToast("Account registration is coming soon.");
           }}
-        >
-          <div
-            className="login-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="login-title"
-          >
-            <button
-              className="modal-close"
-              onClick={() => setShowLogin(false)}
-              aria-label="Close login window"
-            >
-              <X size={20} />
-            </button>
-
-            <div className="login-gate-icon">
-              <LockKeyhole size={28} />
-            </div>
-
-            <h2 id="login-title">Welcome back</h2>
-
-            <p className="login-modal-description">
-              Sign in to access your CloudVault files.
-            </p>
-
-            <form onSubmit={handleLoginSubmit}>
-              <label htmlFor="login-email">Email address</label>
-              <input
-                id="login-email"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="off"
-                required
-              />
-
-              <label htmlFor="login-password">Password</label>
-              <input
-                id="login-password"
-                type="password"
-                placeholder="Enter your password"
-                autoComplete="new-password"
-                required
-              />
-
-              <button
-                className="primary-button login-submit"
-                type="submit"
-              >
-                Sign in
-              </button>
-            </form>
-
-            <p className="login-modal-footer">
-              Don't have an account?{" "}
-              <button
-                className="text-button"
-                type="button"
-                onClick={() => {
-                  setShowLogin(false);
-                  showToast("Account registration is coming soon.");
-                }}
-              >
-                Create an account
-              </button>
-            </p>
-          </div>
-        </div>
+        />
       )}
 
       {/* Temporary notification */}
@@ -237,6 +182,7 @@ function App() {
           {toast}
         </div>
       )}
+
     </div>
   );
 }
